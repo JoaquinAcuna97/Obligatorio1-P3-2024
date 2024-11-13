@@ -1,5 +1,7 @@
-﻿using ComiteLogicaNegocio.Entidades;
+﻿using ComiteAccesoADatos.Excepciones;
+using ComiteLogicaNegocio.Entidades;
 using ComiteLogicaNegocio.InterfacesRepositorios;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace ComiteAccesoADatos.EF
@@ -15,24 +17,61 @@ namespace ComiteAccesoADatos.EF
 
         public void Add(Disciplina obj)
         {
+            
             if (obj == null) 
             {
-                throw new ArgumentNullException("No se recibio el usuario vàlido");
+                throw new DisciplinaException("No se recibio una disciplina valida");
             }
-            _context.Add(obj);
-            _context.SaveChanges();
+            if (DisciplinaExist(obj.Nombre)) {
+                throw new DisciplinaException("La disciplina ya existe");
+            }
+            if (obj.Nombre.Length < 10)
+            {
+                throw new DisciplinaException("El nombre de disiplina debe tener 10 caracteres o mas");
+            }
+            if (obj.Nombre.Length > 50)
+            {
+                throw new DisciplinaException("El nombre de disiplina debe tener menos de 50 caracteres");
+            }
+            if (obj.Year > 2024)
+            {
+                throw new DisciplinaException("El año no puede ser mayor al actual");
+            }
+            try
+            {
+                _context.Add(obj);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw new DisciplinaException("No se pudo agregar la disciplina");
+            }
+
         }
 
         public void Delete(Disciplina obj)
         {
-            Disciplina d = GetById(obj.ID);
-            _context.disciplinas.Remove(d);
-            _context.SaveChanges();
+            try
+            {
+                Disciplina d = GetById(obj.ID);
+                _context.disciplinas.Remove(d);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw new DisciplinaException("Error al eliminar disciplina");
+            }
+
         }
 
         public IEnumerable<Disciplina> GetAll()
         {
-            return _context.disciplinas;
+            return _context.disciplinas
+               .Include(d => d.Atletas)
+               .OrderBy(d => d.Nombre)
+               .ToList();
         }
 
         public Disciplina GetById(int id)
@@ -43,7 +82,7 @@ namespace ComiteAccesoADatos.EF
                 .FirstOrDefault(disciplina => disciplina.ID == id);
             if (d == null)
             {
-                throw new Exception($"No se encontro la el usuario con id {id}");
+                throw new DisciplinaException($"No se encontro la disciplina con id {id}");
             }
             return d;
         }
@@ -56,9 +95,17 @@ namespace ComiteAccesoADatos.EF
                 .FirstOrDefault(d => d.Nombre == nombre);
             if (d == null)
             {
-                throw new Exception($"No se encontro la discipina con email {nombre}");
+                throw new Exception($"No se encontro la discipina con nombre {nombre}");
             }
             return d;
+        }
+        public bool DisciplinaExist(string nombre) {
+            Disciplina? d = null;
+            d =
+                _context.disciplinas
+                .AsEnumerable()
+                .FirstOrDefault(d => d.Nombre == nombre);
+            return d != null;
         }
     }
 }

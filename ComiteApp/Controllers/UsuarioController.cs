@@ -36,9 +36,18 @@ namespace ComiteApp.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string message, string sucessMessage)
         {
-            return View(_obtenerTodos.Ejecutar());
+            try
+            {
+                ViewBag.Message = message;
+                ViewBag.sucessMessage = sucessMessage;
+                return View(_obtenerTodos.Ejecutar());
+
+            } catch (Exception e) {
+                ViewBag.Message = e.Message;
+                return View();
+            }
         }
 
         [HttpGet]
@@ -53,7 +62,7 @@ namespace ComiteApp.Controllers
             try
             {
                 _alta.Ejecutar(usuario);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { sucessMessage = "Usuario creado con exito" });
             }
             catch (Exception e)
             {
@@ -70,13 +79,19 @@ namespace ComiteApp.Controllers
             {
                 return NotFound();
             }
-
-            var Usuario = _obtenerID.Ejecutar(id);
-            if (Usuario == null)
+            try
             {
-                return NotFound();
-            }
-            return View(Usuario);
+                var Usuario = _obtenerID.Ejecutar(id);
+                if (Usuario == null)
+                {
+                    return NotFound();
+                }
+                return View(Usuario);
+
+            } catch (Exception e) {
+                ViewBag.Message = e.Message;
+                return View();
+            } 
         }
 
         // POST: Usuarios/Edit/5
@@ -94,18 +109,11 @@ namespace ComiteApp.Controllers
                 {
                     _editar.Ejecutar(Usuario);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(Usuario.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                catch (Exception e) {
+                    ViewBag.Message = e.Message;
+                    return View();
+                } 
+                return RedirectToAction("Index", new { sucessMessage = "Usuario editado con exito" });
 
         }
 
@@ -116,14 +124,22 @@ namespace ComiteApp.Controllers
             {
                 return NotFound();
             }
-
-            var Usuario = _obtenerID.Ejecutar(id);
-            if (Usuario == null)
+            try
             {
-                return NotFound();
+                var Usuario = _obtenerID.Ejecutar(id);
+                if (Usuario == null)
+                {
+                    return NotFound();
+                }
+
+                return View(Usuario);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return View();
             }
 
-            return View(Usuario);
         }
 
         // POST: Usuarios/Delete/5
@@ -131,18 +147,21 @@ namespace ComiteApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var Usuario = _obtenerID.Ejecutar(id);
-            if (Usuario != null)
+            try
             {
-                _eliminar.Ejecutar(Usuario);
+                var Usuario = _obtenerID.Ejecutar(id);
+                if (Usuario != null)
+                {
+                    _eliminar.Ejecutar(Usuario);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
-        }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return View();
+            }
 
-        private bool UsuarioExists(int id)
-        {
-            var Usuario = _obtenerID.Ejecutar(id);
-            return Usuario != null;
         }
 
 

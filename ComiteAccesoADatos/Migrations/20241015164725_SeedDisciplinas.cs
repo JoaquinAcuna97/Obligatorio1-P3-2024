@@ -8,6 +8,7 @@ namespace ComiteAccesoADatos.Migrations
     public partial class SeedDisciplinas : Migration
     {
         /// <inheritdoc />
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
@@ -27,13 +28,13 @@ namespace ComiteAccesoADatos.Migrations
             );
             migrationBuilder.InsertData(
                 "disciplinas",
-               new[] { "ID", "Nombre", "Year" },
-               new object[] { 4, "Tenis", 94 }
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 4, "Tenis", 94 }
             );
             migrationBuilder.InsertData(
                 "disciplinas",
-               new[] { "ID", "Nombre", "Year" },
-               new object[] { 5, "Tenis de mesa", 94 }
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 5, "Tenis de mesa", 94 }
             );
             migrationBuilder.InsertData(
                 "disciplinas",
@@ -50,11 +51,41 @@ namespace ComiteAccesoADatos.Migrations
                 new[] { "ID", "Nombre", "Year" },
                 new object[] { 8, "Triatlón", 94 }
             );
-
             migrationBuilder.InsertData(
                 "disciplinas",
                 new[] { "ID", "Nombre", "Year" },
                 new object[] { 9, "Vela", 94 }
+            );
+
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 10, "Atletismo", 94 }
+            );
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 11, "Ciclismo", 94 }
+            );
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 12, "Natación", 94 }
+            );
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 13, "Gimnasia", 94 }
+            );
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 14, "Boxeo", 94 }
+            );
+            migrationBuilder.InsertData(
+                "disciplinas",
+                new[] { "ID", "Nombre", "Year" },
+                new object[] { 15, "Esgrima", 94 }
             );
 
         }

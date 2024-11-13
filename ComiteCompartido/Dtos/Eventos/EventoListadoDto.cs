@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComiteCompartido.Dtos.Atletas
+namespace ComiteCompartido.Dtos.Eventos
 {
-    public record AtletaAltaDto(
+    public record EventoListadoDto(
         int id,
+        string NombreDisciplina,
         string Nombre,
-        string Sexo,
-        int paisId,
-        List<int> DisciplinasIds
-        )
+        DateTime Inicio,
+        DateTime Fin
+    )
     {
     }
 }

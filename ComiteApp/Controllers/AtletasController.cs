@@ -1,8 +1,10 @@
 ﻿using ComiteCompartido.Dtos.Atletas;
 using ComiteCompartido.Dtos.Disciplinas;
+using ComiteLogicaNegocio.Entidades;
 using ComiteLogicaNegocio.InterfacesCasoUso;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ComiteApp.Controllers
 {
@@ -27,8 +29,9 @@ namespace ComiteApp.Controllers
 
         
         [HttpGet]
-        public IActionResult Atletas()
+        public IActionResult Atletas(string message)
         {
+            ViewBag.Message = message;
             return View(_obtenerTodos.Ejecutar());
         }
 
@@ -45,7 +48,16 @@ namespace ComiteApp.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Disciplinas = _obtenerTodasDisciplinas.Ejecutar().ToList();
+
+            List<DisciplinasListadoDto> disciplinas = _obtenerTodasDisciplinas.Ejecutar().ToList();
+            List<DisciplinasListadoDto> discilinasAtleta = new List<DisciplinasListadoDto>();
+            foreach (int i in Atleta.DisciplinasIds) {
+                DisciplinasListadoDto? disciplina = disciplinas.FirstOrDefault(d => d.Id == i);
+                discilinasAtleta.Add(disciplina);
+            }
+            
+            ViewBag.Disciplinas = disciplinas;
+            ViewBag.DisciplinasAtleta = discilinasAtleta;
             return View(Atleta);
         }
 
@@ -53,15 +65,30 @@ namespace ComiteApp.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, AtletaAltaDto Atleta)
+        public async Task<IActionResult> Edit(int id, AtletaAltaDto atleta, List<int> DisciplinasDisponiblesIds, List<int> SelectedDisciplinaIds, string action)
         {
-            if (id != Atleta.id)
+            if (id != atleta.id)
             {
                 return NotFound();
             }
             try
             {
-                _editar.Ejecutar(Atleta);
+                if (action == "add")
+                {
+                    // Get selected disciplines from available list
+                    var selectedIds = DisciplinasDisponiblesIds.Where(id => !SelectedDisciplinaIds.Contains(id)).ToList();
+                    atleta.DisciplinasIds.AddRange(selectedIds);
+                }
+                else if (action == "remove")
+                {
+                    // Remove selected disciplines
+                    var idsToRemove = SelectedDisciplinaIds.Where(id => DisciplinasDisponiblesIds.Contains(id)).ToList();
+                    foreach (var i in idsToRemove)
+                    {
+                        atleta.DisciplinasIds.Remove(i);
+                    }
+                }
+                _editar.Ejecutar(atleta);
             }
             catch (DbUpdateConcurrencyException)
             {

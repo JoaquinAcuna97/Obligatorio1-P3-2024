@@ -29,7 +29,12 @@ namespace ComiteAccesoADatos.EF
 
         public IEnumerable<Atleta> GetAll()
         {
-            return _context.atletas.Include(a => a.Pais).ToList();
+            return _context.atletas
+               .Include(a => a.Pais)
+               .Include(a => a.Disciplinas)
+               .OrderBy(a => a.Pais.NombrePais)  // Asegúrate de que 'Nombre' es la propiedad correcta en 'Pais'
+               .ThenBy(a => a.Nombre)       // Suponiendo que 'Apellido' es la propiedad que contiene el apellido del atleta
+               .ToList();
         }
 
         public Atleta GetById(int id)
@@ -49,7 +54,14 @@ namespace ComiteAccesoADatos.EF
             Atleta a = GetById(obj.ID);
             a.Nombre = obj.Nombre;
             a.Sexo = obj.Sexo;
-            a.Disciplinas = obj.Disciplinas;
+            foreach(int i in obj.DisciplinasIds){
+                Disciplina? d = null;
+                d =
+                    _context.disciplinas
+                    .FirstOrDefault(disciplina => disciplina.ID == i);
+                a.Disciplinas.Add(d);
+                a.DisciplinasIds.Add(i);
+            }
             _context.atletas.Update(a);
             _context.SaveChanges();
         }

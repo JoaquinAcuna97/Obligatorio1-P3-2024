@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComiteLogicaAplicacion.CasoUso.Atleta
+namespace ComiteLogicaAplicacion.CasoUso.CasoUsoEvento
 {
-    public class AgregarDisciplinaAtleta
+    public class IngresarPuntaje
     {
     }
 }

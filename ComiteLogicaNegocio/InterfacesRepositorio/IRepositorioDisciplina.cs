@@ -7,5 +7,7 @@ namespace ComiteLogicaNegocio.InterfacesRepositorios
     {
         Disciplina GetByName(string nombre);
         void Delete(Disciplina obj);
+
+        void Edit(Disciplina obj);
     }
 }

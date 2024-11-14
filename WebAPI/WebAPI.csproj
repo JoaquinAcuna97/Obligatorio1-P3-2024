@@ -10,4 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ComiteAccesoADatos\ComiteAccesoADatos.csproj" />
+    <ProjectReference Include="..\ComiteCompartido\ComiteCompartido.csproj" />
+    <ProjectReference Include="..\ComiteLogicaAplicacion\ComiteLogicaAplicacion.csproj" />
+    <ProjectReference Include="..\ComiteLogicaNegocio\ComiteLogicaNegocio.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -24,7 +24,7 @@ namespace ComiteApp.Controllers
             IObtener<DisciplinasAltaDto> obtenerID,
             IEliminar<DisciplinasAltaDto> eliminar)
         { 
-        _obtenerTodas = obtenerTodas;
+            _obtenerTodas = obtenerTodas;
             _alta = alta;
             _obtenerID = obtenerID;
             _eliminar = eliminar;

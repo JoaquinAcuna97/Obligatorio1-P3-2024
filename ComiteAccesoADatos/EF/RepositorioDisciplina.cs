@@ -107,5 +107,41 @@ namespace ComiteAccesoADatos.EF
                 .FirstOrDefault(d => d.Nombre == nombre);
             return d != null;
         }
+        public bool DisciplinaExiste(string nombre)
+        {
+
+            Disciplina? d = null;
+            d =
+                _context.disciplinas
+                .AsEnumerable()
+                .FirstOrDefault(disciplina => disciplina.Nombre == nombre);
+            return d != null;
+        }
+
+        public void Edit(Disciplina obj)
+        {
+            Disciplina d = GetById(obj.ID);
+            if (d == null)
+            {
+                throw new DisciplinaException("No se recibio disciplina valida");
+            }
+            if (DisciplinaExiste(obj.Nombre))
+            {
+                throw new DisciplinaException("Ya existe una disciplina con ese nombre");
+            }
+            try
+            {
+                d.Nombre = obj.Nombre;
+                d.Year = obj.Year;
+                _context.disciplinas.Update(d);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw new DisciplinaException("Error al editar disciplina");
+            }
+
+        }
     }
 }

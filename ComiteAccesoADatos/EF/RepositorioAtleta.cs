@@ -36,7 +36,15 @@ namespace ComiteAccesoADatos.EF
                .ThenBy(a => a.Nombre)       // Suponiendo que 'Apellido' es la propiedad que contiene el apellido del atleta
                .ToList();
         }
-
+        public IEnumerable<Atleta> GetByDiscipline(int disciplinaId)
+        {
+            return _context.atletas
+               .Include(a => a.Pais).Where(a=>a.DisciplinasIds.Contains(disciplinaId))
+               .Include(a => a.Disciplinas)
+               .OrderBy(a => a.Pais.NombrePais)  // Asegúrate de que 'Nombre' es la propiedad correcta en 'Pais'
+               .ThenBy(a => a.Nombre)       // Suponiendo que 'Apellido' es la propiedad que contiene el apellido del atleta
+               .ToList();
+        }
         public Atleta GetById(int id)
         {
             Atleta? a = null;

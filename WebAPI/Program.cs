@@ -1,9 +1,12 @@
 
 using ComiteAccesoADatos.EF;
+using ComiteCompartido.Dtos.Atletas;
 using ComiteCompartido.Dtos.Disciplinas;
+using ComiteLogicaAplicacion.CasoUso.CasoUsoAtleta;
 using ComiteLogicaAplicacion.CasoUso.Disciplinas;
 using ComiteLogicaNegocio.CasoUso.Disciplinas;
 using ComiteLogicaNegocio.InterfacesCasoUso;
+using ComiteLogicaNegocio.InterfacesRepositorio;
 using ComiteLogicaNegocio.InterfacesRepositorios;
 
 namespace WebAPI
@@ -16,12 +19,18 @@ namespace WebAPI
 
             // Add services to the container.
             builder.Services.AddScoped<IRepositorioDisciplina, RepositorioDisciplina>();
+            builder.Services.AddScoped<IRepositorioAtleta, RepositorioAtleta>();
+
 
             builder.Services.AddScoped<IAlta<DisciplinasAltaDto>, AltaDisciplina>();
             builder.Services.AddScoped<IObtenerTodos<DisciplinasListadoDto>, ObtenerDisciplinas>();
+
             builder.Services.AddScoped<IObtener<DisciplinasAltaDto>, ObtenerDisciplina>();
             builder.Services.AddScoped<IEliminar<DisciplinasAltaDto>, EliminarDisciplina>();
             builder.Services.AddScoped<IEditar<DisciplinasAltaDto>, EditarDisciplina>();
+
+            builder.Services.AddScoped<IObtenerTodosPorDisciplina<AtletaListadoDto>, ObtenerAtletasPorDisciplina>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

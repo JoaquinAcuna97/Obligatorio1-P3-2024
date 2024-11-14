@@ -11,5 +11,6 @@ namespace ComiteLogicaNegocio.InterfacesRepositorio
     public interface IRepositorioAtleta : IRepositorio<Atleta>
     {
         void Edit(Atleta obj);
+        IEnumerable<Atleta> GetByDiscipline(int id);
     }
 }

@@ -7,6 +7,5 @@ namespace ComiteLogicaNegocio.InterfacesRepositorios
         T GetById(int id);
         IEnumerable<T> GetAll();
 
-
     }
 }

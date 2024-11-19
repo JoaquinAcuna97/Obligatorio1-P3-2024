@@ -100,10 +100,12 @@ namespace ComiteApp.Controllers
             {
                 List<AtletaAltaDto> atletas = new List<AtletaAltaDto>();
                 EventoAltaDto evento = _obtenerEvento.Ejecutar(id);
+                /*
                 foreach (int i in evento.AtletasIds)
                 {
                     atletas.Add(_obtenerAtleta.Ejecutar(i));
                 }
+                */
                 List<DisciplinasListadoDto> disciplinas = _obtenerDisciplinas.Ejecutar().ToList();
                 string d = disciplinas.FirstOrDefault(d => d.Id == evento.DisciplinaId)?.Nombre;
                 ViewBag.Disciplina = d;

@@ -56,7 +56,9 @@ namespace ComiteAccesoADatos.Migrations
                 { 21, "Carlos López", "M", 1, "[1,3]" }
             }
             );
+            /*
 
+            */
         }
 
 

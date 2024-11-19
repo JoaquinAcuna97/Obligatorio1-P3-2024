@@ -12,8 +12,7 @@ namespace ComiteCompartido.Dtos.Eventos
     int DisciplinaId,
     string Nombre,
     DateTime Inicio,
-    DateTime Fin,
-    List<int> AtletasIds
+    DateTime Fin
     )
     {
     }

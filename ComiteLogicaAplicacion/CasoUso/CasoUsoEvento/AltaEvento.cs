@@ -44,18 +44,20 @@ namespace ComiteLogicaAplicacion.CasoUso.CasoUsoEvento
             Disciplina d = _disciplinas.GetById(obj.DisciplinaId);
             e.Disciplina = d;
             int cantidadAtletas = 0;
-            foreach (int atletaId in obj.AtletasIds)
-            {
-                Atleta a = _atletas.GetById(atletaId);
-                if (a != null) {
-                    if (!a.DisciplinasIds.Contains(obj.DisciplinaId))
-                    {
-                        throw new Exception("El atleta debe pertenecer a la disciplina del evento");
-                    }
-                    cantidadAtletas++;
-                    e.atletas.Add(a);
-                }
-            }
+            /* foreach (int atletaId in obj.AtletasIds)
+           {
+               Atleta a = _atletas.GetById(atletaId);
+               if (a != null) {
+                   if (!a.DisciplinasIds.Contains(obj.DisciplinaId))
+                   {
+                       throw new Exception("El atleta debe pertenecer a la disciplina del evento");
+                   }
+                   cantidadAtletas++;
+                   e.atletas.Add(a);
+               }
+           }
+        */
+
             if (cantidadAtletas >= 3)
             {
                 _repositorio.Add(e);

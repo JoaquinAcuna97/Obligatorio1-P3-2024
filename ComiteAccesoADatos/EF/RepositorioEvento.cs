@@ -50,7 +50,7 @@ namespace ComiteAccesoADatos.EF
         {
             Evento? e = null;
             e =
-                _context.eventos.Include(e=>e.atletas)
+                _context.eventos
             .AsEnumerable()
                 .FirstOrDefault(e => e.ID == id);
             if (e == null)

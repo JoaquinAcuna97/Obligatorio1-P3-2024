@@ -23,6 +23,8 @@ namespace ComiteLogicaNegocio.Entidades
         public List<Disciplina> Disciplinas { get; set; }
         public List<int> DisciplinasIds { get; set; }
 
+        // Relación con EventoAtleta
+        public List<EventoAtleta> EventoAtletas { get; set; }
 
         public Atleta() { }
 
@@ -34,6 +36,7 @@ namespace ComiteLogicaNegocio.Entidades
             PaisId = paisId;
             DisciplinasIds = disciplinasIds;
             Disciplinas = new List<Disciplina>();
+            EventoAtletas = new List<EventoAtleta>();
         }
     }
 }

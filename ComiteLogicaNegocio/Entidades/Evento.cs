@@ -16,8 +16,8 @@ namespace ComiteLogicaNegocio.Entidades
         public DateTime Inicio { get; set; }
         public DateTime Fin { get; set; }
 
-        public List<Atleta> atletas { get; set; }
-
+        // Relación con los atletas a través de EventoAtleta
+        public List<EventoAtleta> EventoAtletas { get; set; }
         protected Evento() { }
 
         public Evento(int iD, int disciplina, string nombre, DateTime inicio, DateTime fin)
@@ -27,7 +27,7 @@ namespace ComiteLogicaNegocio.Entidades
             Nombre = nombre;
             Inicio = inicio;
             Fin = fin;
-            atletas = new List<Atleta>();
+            EventoAtletas = new List<EventoAtleta>();
         }
     }
 }

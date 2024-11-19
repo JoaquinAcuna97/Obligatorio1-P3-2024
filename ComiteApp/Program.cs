@@ -75,10 +75,10 @@ namespace ComiteApp
             builder.Services.AddScoped<IEliminar<UsuarioAltaDto>, EliminarUsuario>();
             builder.Services.AddScoped<IEditar<UsuarioAltaDto>, EditarUsuario>();
 
-            builder.Services.AddScoped<IAlta<DisciplinasAltaDto>, AltaDisciplina>();
+            builder.Services.AddScoped<IAltaLogs<DisciplinasAltaDto>, AltaDisciplina>();
             builder.Services.AddScoped<IObtenerTodos<DisciplinasListadoDto>, ObtenerDisciplinas>();
             builder.Services.AddScoped<IObtener<DisciplinasAltaDto>, ObtenerDisciplina>();
-            builder.Services.AddScoped<IEliminar<DisciplinasAltaDto>, EliminarDisciplina>();
+            builder.Services.AddScoped<IEliminarLogs<DisciplinasAltaDto>, EliminarDisciplina>();
 
             builder.Services.AddScoped<IObtenerTodos<AtletaListadoDto>, ObtenerAtletas>();
             builder.Services.AddScoped<IObtener<AtletaAltaDto>, ObtenerAtleta>();

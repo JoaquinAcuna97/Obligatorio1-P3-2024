@@ -2,7 +2,9 @@
 using ComiteLogicaNegocio.Excepciones;
 using ComiteLogicaNegocio.InterfacesCasoUso;
 using ComiteLogicaNegocio.Vo.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,22 +12,23 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace WebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
+    [Authorize]
     [ApiController]
     public class DisciplinasController : ControllerBase
     {
 
-        IAlta<DisciplinasAltaDto> _alta;
+        IAltaLogs<DisciplinasAltaDto> _alta;
         IObtenerTodos<DisciplinasListadoDto> _obtenerTodos;
         IObtener<DisciplinasAltaDto> _obtener;
-        IEliminar<DisciplinasAltaDto> _eliminar;
-        IEditar<DisciplinasAltaDto> _editar;
+        IEliminarLogs<DisciplinasAltaDto> _eliminar;
+        IEditarLogs<DisciplinasAltaDto> _editar;
 
         public DisciplinasController(
-            IAlta<DisciplinasAltaDto> alta,
+            IAltaLogs<DisciplinasAltaDto> alta,
             IObtenerTodos<DisciplinasListadoDto> obtenerTodos,
             IObtener<DisciplinasAltaDto> obtener,
-            IEliminar<DisciplinasAltaDto> eliminar,
-            IEditar<DisciplinasAltaDto> editar
+            IEliminarLogs<DisciplinasAltaDto> eliminar,
+            IEditarLogs<DisciplinasAltaDto> editar
         ){
             _alta = alta;
             _obtenerTodos = obtenerTodos;
@@ -36,6 +39,7 @@ namespace WebAPI.Controllers
 
         // GET: api/<DisciplinasController>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAll()
@@ -57,6 +61,7 @@ namespace WebAPI.Controllers
 
         // GET api/<DisciplinasController>/5
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<DisciplinasAltaDto> GetId(int id)
@@ -75,6 +80,7 @@ namespace WebAPI.Controllers
 
         // GET api/<DisciplinasController>/nombre/Boxeo
         [HttpGet("nombre/{nombre}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -98,6 +104,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -105,7 +112,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                _alta.Ejecutar(disciplina);
+                _alta.Ejecutar(disciplina, EmailUser());
                 var d = _obtener.Ejecutar(disciplina.Nombre);
                 return Ok(d);
 
@@ -121,6 +128,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Update(int id, [FromBody] DisciplinasAltaDto disciplina)
@@ -129,7 +137,7 @@ namespace WebAPI.Controllers
             try
             {
                 DisciplinasAltaDto d = new DisciplinasAltaDto(id, disciplina.Nombre, disciplina.Year);
-                _editar.Ejecutar(d);
+                _editar.Ejecutar(d, EmailUser());
 
                 return Ok();
             }
@@ -143,6 +151,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpDelete("{id:int}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(int id)
@@ -151,7 +160,7 @@ namespace WebAPI.Controllers
             try
             {
                 DisciplinasAltaDto d = new DisciplinasAltaDto(id, "", 0);
-                _eliminar.Ejecutar(d);
+                _eliminar.Ejecutar(d, EmailUser());
                 return NoContent();
             }
             catch (Exception ex)
@@ -159,6 +168,23 @@ namespace WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
+        }
+
+        private string EmailUser()
+        {
+            string email = null;
+            // como obtener el name y rol del token
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null)
+            {
+                var roleClaim = claimsIdentity.Claims
+                    .FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                var emailClaim = claimsIdentity.Claims
+                   .FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+                email = emailClaim.Value;
+            }
+            return email;
         }
     }
 }

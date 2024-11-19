@@ -2,12 +2,17 @@
 using ComiteAccesoADatos.EF;
 using ComiteCompartido.Dtos.Atletas;
 using ComiteCompartido.Dtos.Disciplinas;
+using ComiteCompartido.Dtos.Usuarios;
 using ComiteLogicaAplicacion.CasoUso.CasoUsoAtleta;
 using ComiteLogicaAplicacion.CasoUso.Disciplinas;
+using ComiteLogicaAplicacion.CasoUso.Usuarios;
 using ComiteLogicaNegocio.CasoUso.Disciplinas;
 using ComiteLogicaNegocio.InterfacesCasoUso;
 using ComiteLogicaNegocio.InterfacesRepositorio;
 using ComiteLogicaNegocio.InterfacesRepositorios;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebAPI
 {
@@ -20,16 +25,20 @@ namespace WebAPI
             // Add services to the container.
             builder.Services.AddScoped<IRepositorioDisciplina, RepositorioDisciplina>();
             builder.Services.AddScoped<IRepositorioAtleta, RepositorioAtleta>();
+            builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
+            builder.Services.AddScoped<IRepositorioLog, RepositorioLog>();
 
-
-            builder.Services.AddScoped<IAlta<DisciplinasAltaDto>, AltaDisciplina>();
+            builder.Services.AddScoped<IAltaLogs<DisciplinasAltaDto>, AltaDisciplina>();
             builder.Services.AddScoped<IObtenerTodos<DisciplinasListadoDto>, ObtenerDisciplinas>();
 
             builder.Services.AddScoped<IObtener<DisciplinasAltaDto>, ObtenerDisciplina>();
-            builder.Services.AddScoped<IEliminar<DisciplinasAltaDto>, EliminarDisciplina>();
-            builder.Services.AddScoped<IEditar<DisciplinasAltaDto>, EditarDisciplina>();
+            builder.Services.AddScoped<IEliminarLogs<DisciplinasAltaDto>, EliminarDisciplina>();
+            builder.Services.AddScoped<IEditarLogs<DisciplinasAltaDto>, EditarDisciplina>();
 
             builder.Services.AddScoped<IObtenerTodosPorDisciplina<AtletaListadoDto>, ObtenerAtletasPorDisciplina>();
+
+            // inyecto los caos de uso de autores
+            builder.Services.AddScoped<IObtenerLogin<UsuarioAltaDto>, ObtenerLogin>();
 
 
             builder.Services.AddControllers();
@@ -38,6 +47,27 @@ namespace WebAPI
             builder.Services.AddSwaggerGen();
             // inyectando la Comite Contex
             builder.Services.AddDbContext<ComiteContext>();
+
+            var claveSecreta = "ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE=";
+            builder.Services.AddAuthentication(aut =>
+            {
+                aut.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                aut.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(aut =>
+            {
+                aut.RequireHttpsMetadata = false;
+                aut.SaveToken = true;
+                aut.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(claveSecreta)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

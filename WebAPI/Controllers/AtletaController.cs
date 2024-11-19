@@ -1,5 +1,6 @@
 ﻿using ComiteCompartido.Dtos.Atletas;
 using ComiteLogicaNegocio.InterfacesCasoUso;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers

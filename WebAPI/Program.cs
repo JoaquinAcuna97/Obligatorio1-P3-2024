@@ -2,8 +2,10 @@
 using ComiteAccesoADatos.EF;
 using ComiteCompartido.Dtos.Atletas;
 using ComiteCompartido.Dtos.Disciplinas;
+using ComiteCompartido.Dtos.Eventos;
 using ComiteCompartido.Dtos.Usuarios;
 using ComiteLogicaAplicacion.CasoUso.CasoUsoAtleta;
+using ComiteLogicaAplicacion.CasoUso.CasoUsoEvento;
 using ComiteLogicaAplicacion.CasoUso.Disciplinas;
 using ComiteLogicaAplicacion.CasoUso.Usuarios;
 using ComiteLogicaNegocio.CasoUso.Disciplinas;
@@ -25,11 +27,13 @@ namespace WebAPI
             // Add services to the container.
             builder.Services.AddScoped<IRepositorioDisciplina, RepositorioDisciplina>();
             builder.Services.AddScoped<IRepositorioAtleta, RepositorioAtleta>();
+            builder.Services.AddScoped<IRepositorioEvento, RepositorioEvento>();
             builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
             builder.Services.AddScoped<IRepositorioLog, RepositorioLog>();
 
             builder.Services.AddScoped<IAltaLogs<DisciplinasAltaDto>, AltaDisciplina>();
             builder.Services.AddScoped<IObtenerTodos<DisciplinasListadoDto>, ObtenerDisciplinas>();
+            builder.Services.AddScoped<IObtenerEventosFiltro<EventoConAtletaListadoDto>, ObtenerEventosFiltro>();
 
             builder.Services.AddScoped<IObtener<DisciplinasAltaDto>, ObtenerDisciplina>();
             builder.Services.AddScoped<IEliminarLogs<DisciplinasAltaDto>, EliminarDisciplina>();

@@ -43,7 +43,7 @@ namespace ComiteAccesoADatos.EF
 
         public IEnumerable<Evento> GetAll()
         {
-            return _context.eventos.Include(a => a.Disciplina).ToList();
+            return _context.eventos.Include(a => a.Disciplina).Include(e => e.EventoAtletas).ThenInclude(ea => ea.Atleta).ToList();
         }
 
         public Evento GetById(int id)

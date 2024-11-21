@@ -8,6 +8,11 @@ namespace ComiteLogicaNegocio.InterfacesCasoUso
 {
     public interface IObtenerEventosFiltro<T>
     {
-        IEnumerable<T> Ejecutar();
+        IEnumerable<T> Ejecutar(int? disciplinaId,
+    DateTime? fechaInicio,
+    DateTime? fechaFin,
+    string nombreEvento,
+    int? puntajeMinimo,
+    int? puntajeMaximo);
     }
 }

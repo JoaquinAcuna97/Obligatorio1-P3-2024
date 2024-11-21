@@ -18,11 +18,17 @@ namespace WebAPI.Controllers
         [HttpGet("Eventos/")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult ObtenerEventos()
+        public IActionResult ObtenerEventos(
+                [FromQuery] int? disciplinaId,   // Filtrar por ID de disciplina
+                [FromQuery] DateTime? fechaInicio,  // Filtrar por fecha de inicio
+                [FromQuery] DateTime? fechaFin,     // Filtrar por fecha de fin
+                [FromQuery] string nombreEvento,    // Filtrar por nombre de evento (búsqueda parcial)
+                [FromQuery] int? puntajeMinimo,     // Filtrar por puntaje mínimo
+                [FromQuery] int? puntajeMaximo)    // Filtrar por puntaje máximo)
         {
             try
             {
-                var eventos = _obtener.Ejecutar();
+                var eventos = _obtener.Ejecutar(disciplinaId, fechaInicio, fechaFin, nombreEvento, puntajeMinimo, puntajeMaximo);
                 if (eventos == null)
                 {
                     return StatusCode(204);

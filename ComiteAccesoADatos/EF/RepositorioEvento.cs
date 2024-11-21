@@ -88,5 +88,54 @@ namespace ComiteAccesoADatos.EF
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<Evento> GetAllFiltered(int? disciplinaId, DateTime? fechaInicio, DateTime? fechaFin, string nombreEvento, int? puntajeMinimo, int? puntajeMaximo)
+        {
+            var eventos = GetAll();
+
+            // Aplicar filtros
+
+            // Filtro por Disciplina
+            if (disciplinaId.HasValue)
+            {
+                eventos = eventos.Where(e => e.DisciplinaId == disciplinaId.Value);
+            }
+
+            // Filtro por Rango de Fechas (inicio y fin)
+            if (fechaInicio.HasValue && fechaFin.HasValue)
+            {
+                if (fechaFin > fechaInicio)
+                {
+                    throw new EventoException("La fecha de inicio no puede ser menor a la de fin");
+                }
+                eventos = eventos.Where(e => e.Inicio <= fechaInicio.Value && e.Fin >= fechaFin.Value);
+            }
+            else if (fechaInicio.HasValue)
+            {
+                eventos = eventos.Where(e => e.Inicio >= fechaInicio.Value);
+            }
+            else if (fechaFin.HasValue)
+            {
+                eventos = eventos.Where(e => e.Fin <= fechaFin.Value);
+            }
+
+            // Filtro por Nombre del Evento (búsqueda parcial)
+            if (!string.IsNullOrEmpty(nombreEvento))
+            {
+                eventos = eventos.Where(e => e.Nombre.Contains(nombreEvento, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Filtro por Rango de Puntajes (mínimo y máximo)
+            if (puntajeMinimo.HasValue || puntajeMaximo.HasValue)
+            {
+                eventos = eventos.Where(e => e.EventoAtletas.Any(a =>
+                    (puntajeMinimo.HasValue && a.Puntaje >= puntajeMinimo.Value) &&
+                    (puntajeMaximo.HasValue && a.Puntaje <= puntajeMaximo.Value)
+                ));
+            }
+
+            // Ejecutar la consulta y retornar los resultados
+            return eventos;
+        }
     }
 }

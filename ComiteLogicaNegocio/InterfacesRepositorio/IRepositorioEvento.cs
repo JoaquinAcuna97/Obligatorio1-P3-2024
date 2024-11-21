@@ -12,5 +12,13 @@ namespace ComiteLogicaNegocio.InterfacesRepositorio
     {
         Evento GetByName(string nombre);
         public void AgregarAtletaAlEvento(Atleta atleta);
+        IEnumerable<Evento> GetAllFiltered(
+                int? disciplinaId,
+                DateTime? fechaInicio,
+                DateTime? fechaFin,
+                string nombreEvento,
+                int? puntajeMinimo,
+                int? puntajeMaximo
+        );
     }
 }

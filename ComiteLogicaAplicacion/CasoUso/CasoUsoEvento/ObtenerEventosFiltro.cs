@@ -18,10 +18,15 @@ namespace ComiteLogicaAplicacion.CasoUso.CasoUsoEvento
         {
             _repositorio = repositorio;
         }
-        public IEnumerable<EventoConAtletaListadoDto> Ejecutar()
+        public IEnumerable<EventoConAtletaListadoDto> Ejecutar(int? disciplinaId,
+    DateTime? fechaInicio,
+    DateTime? fechaFin,
+    string nombreEvento,
+    int? puntajeMinimo,
+    int? puntajeMaximo)
         {
             // Fetch events, including related Disciplina, EventoAtletas, and Atletas
-            var eventos = _repositorio.GetAll();
+            var eventos = _repositorio.GetAllFiltered(disciplinaId, fechaInicio, fechaFin, nombreEvento, puntajeMinimo, puntajeMaximo);
 
             // Map the events to the new DTO format
             var eventoDtos = EventoMapper.ToListaConAtletasDto(eventos);

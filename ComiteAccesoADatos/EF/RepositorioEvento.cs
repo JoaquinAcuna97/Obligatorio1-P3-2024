@@ -84,11 +84,6 @@ namespace ComiteAccesoADatos.EF
             return e != null;
         }
 
-        public void AgregarAtletaAlEvento(Atleta atleta)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Evento> GetAllFiltered(int? disciplinaId, DateTime? fechaInicio, DateTime? fechaFin, string nombreEvento, int? puntajeMinimo, int? puntajeMaximo)
         {
             var eventos = GetAll();
